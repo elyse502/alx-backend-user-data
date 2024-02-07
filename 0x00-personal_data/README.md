@@ -125,7 +125,7 @@ Create a tuple `PII_FIELDS` constant at the root of the module containing the fi
 * [What Is PII, non-PII, and personal data?](https://piwik.pro/blog/what-is-pii-personal-data/)
 * [Uncovering Password Habits](https://www.digitalguardian.com/blog/uncovering-password-habits-are-users-password-security-habits-improving-infographic)
 ```groovy
-bob@dylan:~$ cat main.py
+bob@dylan:~$ cat 2-main.py
 #!/usr/bin/env python3
 """
 Main file
@@ -140,13 +140,70 @@ print(get_logger.__annotations__.get('return'))
 print("PII_FIELDS: {}".format(len(PII_FIELDS)))
 
 bob@dylan:~$
-bob@dylan:~$ ./main.py
+bob@dylan:~$ ./2-main.py
 <class 'logging.Logger'>
 PII_FIELDS: 5
 bob@dylan:~$
 ```
 
+## 3. Connect to secure database: [filtered_logger.py](filtered_logger.py)
+Database credentials should NEVER be stored in code or checked into version control. One secure option is to store them as environment variable on the application server.
 
+In this task, you will connect to a secure `holberton` database to read a `users` table. The database is protected by a username and password that are set as environment variables on the server named `PERSONAL_DATA_DB_USERNAME` (set the default as “root”), `PERSONAL_DATA_DB_PASSWORD` (set the default as an empty string) and `PERSONAL_DATA_DB_HOST` (set the default as “localhost”).
+
+The database name is stored in `PERSONAL_DATA_DB_NAME`.
+
+Implement a `get_db` function that returns a connector to the database (`mysql.connector.connection.MySQLConnection object`).
+
+* Use the `os` module to obtain credentials from the environment
+* Use the module `mysql-connector-python` to connect to the MySQL database (`pip3 install mysql-connector-python`)
+```groovy
+bob@dylan:~$ cat 3-main.sql
+-- setup mysql server
+-- configure permissions
+CREATE DATABASE IF NOT EXISTS my_db;
+CREATE USER IF NOT EXISTS root@localhost IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON my_db.* TO 'root'@'localhost';
+
+USE my_db;
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+    email VARCHAR(256)
+);
+
+INSERT INTO users(email) VALUES ("bob@dylan.com");
+INSERT INTO users(email) VALUES ("bib@dylan.com");
+
+bob@dylan:~$ 
+bob@dylan:~$ cat 3-main.sql | mysql -uroot -p
+Enter password: 
+bob@dylan:~$ 
+bob@dylan:~$ echo "SELECT COUNT(*) FROM users;" | mysql -uroot -p my_db
+Enter password: 
+2
+bob@dylan:~$ 
+bob@dylan:~$ cat 3-main.py
+#!/usr/bin/env python3
+"""
+Main file
+"""
+
+get_db = __import__('filtered_logger').get_db
+
+db = get_db()
+cursor = db.cursor()
+cursor.execute("SELECT COUNT(*) FROM users;")
+for row in cursor:
+    print(row[0])
+cursor.close()
+db.close()
+
+bob@dylan:~$
+bob@dylan:~$ PERSONAL_DATA_DB_USERNAME=root PERSONAL_DATA_DB_PASSWORD=root PERSONAL_DATA_DB_HOST=localhost PERSONAL_DATA_DB_NAME=my_db ./3-main.py
+2
+bob@dylan:~$
+```
 
 
 
