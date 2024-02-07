@@ -1,18 +1,4 @@
-
-
-
 ![alx3](https://github.com/elyse502/alx-backend-user-data/assets/125453474/1cc1c844-dc11-4317-95cd-d94c5312c436)
-
-
-
-
-
-
-
-
-
-
-
 
 <p align="center">
 <h2 align="center"><img align="center" src="https://github.com/elyse502/alx-backend-user-data/assets/125453474/e0395886-3084-4941-be5a-59dbea3af11a" alt="footer" width="150"  height="150"/></h2>
