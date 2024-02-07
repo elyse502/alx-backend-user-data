@@ -1,6 +1,6 @@
 <div align="center">
 
-# 0x00. Personal data
+# 0x00. Personal data 🧰
 
 # 🌐 Unlocking the Secrets of PII, Non-PII, and Personal Data: Navigating the Digital Privacy Landscape 🤐🔍
 ## 🔐 Practical Applications in Daily Life  🚀🔒🔍
