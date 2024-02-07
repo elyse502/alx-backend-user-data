@@ -63,8 +63,53 @@ name=bob;email=bob@dylan.com;password=xxx;date_of_birth=xxx;
 bob@dylan:~$
 ```
 
+## 1. Log formatter: [filtered_logger.py](filtered_logger.py)
+Copy the following code into `filtered_logger.py`.
+```groovy
+import logging
 
 
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self):
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+
+    def format(self, record: logging.LogRecord) -> str:
+        NotImplementedError
+```
+Update the class to accept a list of strings `fields` constructor argument.
+
+Implement the `format` method to filter values in incoming log records using `filter_datum`. Values for fields in `fields` should be filtered.
+
+DO NOT extrapolate `FORMAT` manually. The `format` method should be less than 5 lines long.
+```groovy
+bob@dylan:~$ cat 1-main.py
+#!/usr/bin/env python3
+"""
+Main file
+"""
+
+import logging
+import re
+
+RedactingFormatter = __import__('filtered_logger').RedactingFormatter
+
+message = "name=Bob;email=bob@dylan.com;ssn=000-123-0000;password=bobby2019;"
+log_record = logging.LogRecord("my_logger", logging.INFO, None, None, message, None, None)
+formatter = RedactingFormatter(fields=("email", "ssn", "password"))
+print(formatter.format(log_record))
+
+bob@dylan:~$
+bob@dylan:~$ ./1-main.py
+[HOLBERTON] my_logger INFO 2019-11-19 18:24:25,105: name=Bob; email=***; ssn=***; password=***;
+bob@dylan:~$
+```
 
 
 
