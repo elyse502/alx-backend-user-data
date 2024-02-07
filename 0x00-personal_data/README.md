@@ -111,8 +111,40 @@ bob@dylan:~$ ./1-main.py
 bob@dylan:~$
 ```
 
+## 2. Create logger: [filtered_logger.py](filtered_logger.py)
+Use [user_data.csv](https://s3.amazonaws.com/alx-intranet.hbtn.io/uploads/misc/2019/11/a2e00974ce6b41460425.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUSBVO6H7D%2F20240207%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240207T085340Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=7027e9b974107c77c5073a52fa867a23ac72008fe30214b6359a4f2e8dc296d3) for this task
 
+Implement a `get_logger` function that takes no arguments and returns a `logging.Logger` object.
 
+The logger should be named `"user_data"` and only log up to `logging.INFO` level. It should not propagate messages to other loggers. It should have a `StreamHandler` with `RedactingFormatter` as formatter.
+
+Create a tuple `PII_FIELDS` constant at the root of the module containing the fields from `user_data.csv` that are considered PII. `PII_FIELDS` can contain only 5 fields - choose the right list of fields that can are considered as “important” PIIs or information that you **must hide** in your logs. Use it to parameterize the formatter.
+
+**Tips:**
+
+* [What Is PII, non-PII, and personal data?](https://piwik.pro/blog/what-is-pii-personal-data/)
+* [Uncovering Password Habits](https://www.digitalguardian.com/blog/uncovering-password-habits-are-users-password-security-habits-improving-infographic)
+```groovy
+bob@dylan:~$ cat main.py
+#!/usr/bin/env python3
+"""
+Main file
+"""
+
+import logging
+
+get_logger = __import__('filtered_logger').get_logger
+PII_FIELDS = __import__('filtered_logger').PII_FIELDS
+
+print(get_logger.__annotations__.get('return'))
+print("PII_FIELDS: {}".format(len(PII_FIELDS)))
+
+bob@dylan:~$
+bob@dylan:~$ ./main.py
+<class 'logging.Logger'>
+PII_FIELDS: 5
+bob@dylan:~$
+```
 
 
 
