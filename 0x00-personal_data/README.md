@@ -260,61 +260,60 @@ bob@dylan:~$ PERSONAL_DATA_DB_USERNAME=root PERSONAL_DATA_DB_PASSWORD=root PERSO
 bob@dylan:~$
 ```
 
+## 5. Encrypting passwords: [encrypt_password.py](encrypt_password.py)
+User passwords should NEVER be stored in plain text in a database.
 
+Implement a `hash_password` function that expects one string argument name `password` and returns a salted, hashed password, which is a byte string.
 
+Use the `bcrypt` package to perform the hashing (with `hashpw`).
+```groovy
+bob@dylan:~$ cat 5-main.py
+#!/usr/bin/env python3
+"""
+Main file
+"""
 
+hash_password = __import__('encrypt_password').hash_password
 
+password = "MyAmazingPassw0rd"
+print(hash_password(password))
+print(hash_password(password))
 
+bob@dylan:~$
+bob@dylan:~$ ./5-main.py
+b'$2b$12$Fnjf6ew.oPZtVksngJjh1.vYCnxRjPm2yt18kw6AuprMRpmhJVxJO'
+b'$2b$12$xSAw.bxfSTAlIBglPMXeL.SJnzme3Gm0E7eOEKOVV2OhqOakyUN5m'
+bob@dylan:~$
+```
 
+## 6. Check valid password: [encrypt_password.py](encrypt_password.py)
+Implement an `is_valid` function that expects 2 arguments and returns a boolean.
 
+Arguments:
 
+* `hashed_password`: `bytes` type
+* `password`: string type
 
+Use `bcrypt` to validate that the provided password matches the hashed password.
+```groovy
+bob@dylan:~$ cat 6-main.py
+#!/usr/bin/env python3
+"""
+Main file
+"""
 
+hash_password = __import__('encrypt_password').hash_password
+is_valid = __import__('encrypt_password').is_valid
 
+password = "MyAmazingPassw0rd"
+encrypted_password = hash_password(password)
+print(encrypted_password)
+print(is_valid(encrypted_password, password))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+bob@dylan:~$
+bob@dylan:~$ ./6-main.py
+b'$2b$12$Fnjf6ew.oPZtVksngJjh1.vYCnxRjPm2yt18kw6AuprMRpmhJVxJO'
+True
+bob@dylan:~$
+```
 
