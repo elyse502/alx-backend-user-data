@@ -595,10 +595,93 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Basic Ym
 bob@dylan:~$
 ```
 
+## 12. Basic - Allow password with ":": [api/v1/auth/basic_auth.py](./api/v1/auth/basic_auth.py)
+Improve the method `def extract_user_credentials(self, decoded_base64_authorization_header)` to allow password with `:`.
 
+**In the first terminal:**
+```groovy
+bob@dylan:~$ cat main_100.py
+#!/usr/bin/env python3
+""" Main 100
+"""
+import base64
+from api.v1.auth.basic_auth import BasicAuth
+from models.user import User
 
+""" Create a user test """
+user_email = "bob100@hbtn.io"
+user_clear_pwd = "H0lberton:School:98!"
 
+user = User()
+user.email = user_email
+user.password = user_clear_pwd
+print("New user: {}".format(user.id))
+user.save()
 
+basic_clear = "{}:{}".format(user_email, user_clear_pwd)
+print("Basic Base64: {}".format(base64.b64encode(basic_clear.encode('utf-8')).decode("utf-8")))
+
+bob@dylan:~$ 
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 ./main_100.py 
+New user: 5891469b-d2d5-4d33-b05d-02617d665368
+Basic Base64: Ym9iMTAwQGhidG4uaW86SDBsYmVydG9uOlNjaG9vbDo5OCE=
+bob@dylan:~$
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=basic_auth python3 -m api.v1.app
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+....
+```
+**In a second terminal:**
+```groovy
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/status"
+{
+  "status": "OK"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users"
+{
+  "error": "Unauthorized"
+}
+bob@dylan:~$ 
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Test"
+{
+  "error": "Forbidden"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Basic test"
+{
+  "error": "Forbidden"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Basic Ym9iMTAwQGhidG4uaW86SDBsYmVydG9uOlNjaG9vbDo5OCE="
+[
+  {
+    "created_at": "2017-09-25 01:55:17", 
+    "email": "bob@hbtn.io", 
+    "first_name": null, 
+    "id": "9375973a-68c7-46aa-b135-29f79e837495", 
+    "last_name": null, 
+    "updated_at": "2017-09-25 01:55:17"
+  },
+  {
+    "created_at": "2017-09-25 01:59:42", 
+    "email": "bob100@hbtn.io", 
+    "first_name": null, 
+    "id": "5891469b-d2d5-4d33-b05d-02617d665368", 
+    "last_name": null, 
+    "updated_at": "2017-09-25 01:59:42"
+  }
+]
+bob@dylan:~$
+```
+
+## 13. Require auth with stars: [api/v1/auth/auth.py](./api/v1/auth/auth.py)
+Improve `def require_auth(self, path, excluded_paths)` by allowing `*` at the end of excluded paths.
+
+Example for `excluded_paths = ["/api/v1/stat*"]`:
+
+* `/api/v1/users` will return `True`
+* `/api/v1/status` will return `False`
+* `/api/v1/stats` will return `False`
 
 
 
