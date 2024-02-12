@@ -39,7 +39,7 @@ At the end of this project, you are expected to be able to [explain to anyone](h
 * A documentation is not a simple word, it’s a real sentence explaining what’s the purpose of the module, class or method (the length of it will be verified)
 
 # Tasks 📃
-## 0. Simple-basic-API: [0x01-Basic_authentication](./0x01-Basic_authentication)
+## 0. Simple-basic-API: [0x01-Basic_authentication](./)
 Download and start your project from this [archive.zip](https://github.com/elyse502/alx-backend-user-data/files/14235869/ec2f874b061bd3a2915949f081f4f5f055104f20.zip)
 
 
