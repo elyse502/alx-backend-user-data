@@ -595,6 +595,11 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Basic Ym
 bob@dylan:~$
 ```
 
+<div align="center">
+
+# Advanced Tasks 📃
+</div>
+
 ## 12. Basic - Allow password with ":": [api/v1/auth/basic_auth.py](./api/v1/auth/basic_auth.py)
 Improve the method `def extract_user_credentials(self, decoded_base64_authorization_header)` to allow password with `:`.
 
