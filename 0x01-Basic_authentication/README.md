@@ -96,13 +96,13 @@ For testing this new error handler, add a new endpoint in `api/v1/views/index.py
 
 By calling `abort(401)`, the error handler for 401 will be executed.
 
-In the first terminal:
+**In the first terminal:**
 ```groovy
 bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ....
 ```
-In a second terminal:
+**In a second terminal:**
 ```groovy
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/unauthorized"
 {
