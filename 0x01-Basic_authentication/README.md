@@ -688,6 +688,26 @@ Example for `excluded_paths = ["/api/v1/stat*"]`:
 * `/api/v1/status` will return `False`
 * `/api/v1/stats` will return `False`
 
+---
+
+<div align="center>
+
+# Reference 📚
+</div>
+
+Running the API server returns an issue with some packages
+
+![Screenshot_20240212_115719](https://github.com/elyse502/alx-backend-user-data/assets/125453474/05d48cd4-51fd-4bf3-a6bc-33d0550da2ea)
+
+seems like downgrading the packages make them work : 
+```groovy
+pip install markupsafe==2.0.1
+pip install itsdangerous==2.0.1
+pip install Werkzeug==2.0.3
+```
+=> Soft_unicode was removed from recent markupsafe versions
+
+
 
 
 
