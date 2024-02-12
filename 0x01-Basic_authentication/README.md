@@ -707,6 +707,11 @@ pip install Werkzeug==2.0.3
 ```
 => Soft_unicode was removed from recent markupsafe versions
 
+## OR Upgrade the package
+Had same issue
+```groovy
+Pip  install --upgrade flask markupsafe
+```
 
 
 
