@@ -429,7 +429,7 @@ Add the method `def extract_user_credentials(self, decoded_base64_authorization_
 * This method must return 2 values
 * Return `None, None` if `decoded_base64_authorization_header` is `None`
 * Return `None, None` if `decoded_base64_authorization_header` is not a string
-* Return `None, None` if `decoded_base64_authorization_header` doesn’t contain :
+* Return `None, None` if `decoded_base64_authorization_header` doesn’t contain `:`
 * Otherwise, return the user email and the user password - these 2 values must be separated by a `:`
 * You can assume `decoded_base64_authorization_header` will contain only one `:`
 ```groovy
