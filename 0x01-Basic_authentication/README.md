@@ -690,7 +690,7 @@ Example for `excluded_paths = ["/api/v1/stat*"]`:
 
 ---
 
-<div align="center>
+<div align="center">
 
 # Reference 📚
 </div>
