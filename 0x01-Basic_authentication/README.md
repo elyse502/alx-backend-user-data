@@ -45,6 +45,31 @@ Download and start your project from this [archive.zip](https://github.com/elyse
 
 In this archive, you will find a simple API with one model: `User`. Storage of these users is done via a serialization/deserialization in files.
 
+---
+# N.B: @Cohort 13 
+Hello software engineers
+
+In project https://intranet.alxswe.com/projects/1240 you have to download an archive with files, including `requirements.txt`
+
+`PIP` gives some issues (tested on `python 3.8`)
+
+If you update your `requirements.txt` as following:
+```groovy
+Flask==1.1.2
+Flask-Cors==3.0.8
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==2.0.0
+requests==2.18.4
+pycodestyle==2.6.0
+werkzeug==1.0.1
+```
+Thereby downgrading the versions of `itsdangerous`, `MarkupSafe` and `werkzeug` - it works!
+
+From **Cohort 13 Mentor** 📰
+
+---
+
 **Setup and start server**
 ```groovy
 bob@dylan:~$ pip3 install -r requirements.txt
