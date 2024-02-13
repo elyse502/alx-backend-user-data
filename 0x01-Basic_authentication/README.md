@@ -49,7 +49,7 @@ In this archive, you will find a simple API with one model: `User`. Storage of t
 # N.B: @Cohort 13 
 Hello Software Engineers
 
-In project https://intranet.alxswe.com/projects/1240 you have to download an archive with files, including `requirements.txt`
+In project https://intranet.alxswe.com/projects/1240 👉 [The Project](./) you have to download an archive with files, including `requirements.txt`
 
 `PIP` gives some issues (tested on `python 3.8`)
 
