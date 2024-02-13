@@ -47,7 +47,7 @@ In this archive, you will find a simple API with one model: `User`. Storage of t
 
 ---
 # N.B: @Cohort 13 
-Hello Software Engineers
+_Hello Software Engineers_
 
 In project https://intranet.alxswe.com/projects/1240 👉 [The Project](./) you have to download an archive with files, including `requirements.txt`
 
