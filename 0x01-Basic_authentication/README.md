@@ -81,7 +81,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
 bob@dylan:~$
 ```
 **Use the API (_in another tab or in your browser_)**
-```groovy
+```bash
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/status" -vvv
 *   Trying 0.0.0.0...
 * TCP_NODELAY set
@@ -128,7 +128,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
 ....
 ```
 **In a second terminal:**
-```groovy
+```bash
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/unauthorized"
 {
   "error": "Unauthorized"
@@ -180,7 +180,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 python3 -m api.v1.app
 ....
 ```
 **In a second terminal:**
-```groovy
+```bash
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/forbidden"
 {
   "error": "Forbidden"
