@@ -356,7 +356,7 @@ Cookie value: None
 bob@dylan:~$
 ```
 
-## 5. Before request: [5. Before request](./5. Before request)
+## 5. Before request: [api/v1/app.py](./api/v1/app.py)
 Update the `@app.before_request` method in `api/v1/app.py`:
 
 * Add the URL path `/api/v1/auth_session/login/` in the list of excluded paths of the method `require_auth` - this route doesn’t exist yet but it should be accessible outside authentication
