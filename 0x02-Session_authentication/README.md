@@ -1,4 +1,5 @@
 # 0x02. Session authentication
+
 # Background Context 🗞️
 In this project, you will implement a **Session Authentication**. You are not allowed to install any other module.
 
@@ -849,7 +850,6 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" --cookie "_my_session_id
 }
 bob@dylan:~$
 ```
-
 
 
 
