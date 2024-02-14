@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Python Module """
+""" Python Modules """
 import os
 from datetime import (
     datetime,
