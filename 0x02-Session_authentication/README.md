@@ -491,7 +491,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth SESSION_NAME=
 ....
 ```
 **In a second terminal:**
-```groovy
+```bash
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/auth_session/login" -XGET
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <title>405 Method Not Allowed</title>
@@ -596,7 +596,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth SESSION_NAME=
 ....
 ```
 **In a second terminal:**
-```groovy
+```bash
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/auth_session/login" -XPOST -d "email=bobsession@hbtn.io" -d "password=fake pwd" -vvv
 Note: Unnecessary use of -X or --request, POST is already inferred.
 *   Trying 0.0.0.0...
@@ -696,7 +696,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_exp_auth SESSION_N
 ....
 ```
 **In a second terminal:**
-```groovy
+```bash
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/auth_session/login" -XPOST -d "email=bobsession@hbtn.io" -d "password=fake pwd" -vvv
 Note: Unnecessary use of -X or --request, POST is already inferred.
 *   Trying 0.0.0.0...
@@ -786,7 +786,7 @@ bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_db_auth SESSION_NA
 ....
 ```
 **In a second terminal:**
-```groovy
+```bash
 bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/auth_session/login" -XPOST -d "email=bobsession@hbtn.io" -d "password=fake pwd" -vvv
 Note: Unnecessary use of -X or --request, POST is already inferred.
 *   Trying 0.0.0.0...
