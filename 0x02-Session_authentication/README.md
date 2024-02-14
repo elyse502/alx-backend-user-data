@@ -760,53 +760,95 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" --cookie "_my_session_id
 bob@dylan:~$
 ```
 
+## 10. Sessions in database: [api/v1/auth/session_db_auth.py](./api/v1/auth/session_db_auth.py), [api/v1/app.py](./api/v1/app.py), [models/user_session.py](./models/user_session.py)
+Since the beginning, all Session IDs are stored in memory. It means, if your application stops, all Session IDs are lost.
 
+For avoid that, you will create a new authentication system, based on Session ID stored in database (for us, it will be in a file, like `User`).
 
+Create a new model `UserSession` in `models/user_session.py` that inherits from `Base`:
 
+* Implement the `def __init__(self, *args: list, **kwargs: dict):` like in `User` but for these 2 attributes:
+  * `user_id`: string
+  * `session_id`: string
 
+Create a new authentication class `SessionDBAuth` in `api/v1/auth/session_db_auth.py` that inherits from `SessionExpAuth`:
 
+* Overload def `create_session(self, user_id=None):` that creates and stores new instance of `UserSession` and returns the Session ID
+* Overload `def user_id_for_session_id(self, session_id=None):` that returns the User ID by requesting `UserSession` in the database based on `session_id`
+* Overload def `destroy_session(self, request=None):` that destroys the `UserSession` based on the Session ID from the request cookie
 
+Update `api/v1/app.py` to instantiate `auth` with `SessionDBAuth` if the environment variable `AUTH_TYPE` is equal to `session_db_auth`.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+**In the first terminal:**
+```groovy
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_db_auth SESSION_NAME=_my_session_id SESSION_DURATION=60 python3 -m api.v1.app
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+....
+```
+**In a second terminal:**
+```groovy
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/auth_session/login" -XPOST -d "email=bobsession@hbtn.io" -d "password=fake pwd" -vvv
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying 0.0.0.0...
+* TCP_NODELAY set
+* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+> POST /api/v1/auth_session/login HTTP/1.1
+> Host: 0.0.0.0:5000
+> User-Agent: curl/7.54.0
+> Accept: */*
+> Content-Length: 42
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 42 out of 42 bytes
+* HTTP 1.0, assume close after body
+< HTTP/1.0 200 OK
+< Content-Type: application/json
+< Set-Cookie: _my_session_id=bacadfad-3c3b-4830-b1b2-3d77dfb9ad13; Path=/
+< Access-Control-Allow-Origin: *
+< Content-Length: 210
+< Server: Werkzeug/0.12.1 Python/3.4.3
+< Date: Mon, 16 Oct 2017 04:57:08 GMT
+< 
+{
+  "created_at": "2017-10-16 04:23:04", 
+  "email": "bobsession@hbtn.io", 
+  "first_name": null, 
+  "id": "cf3ddee1-ff24-49e4-a40b-2540333fe992", 
+  "last_name": null, 
+  "updated_at": "2017-10-16 04:23:04"
+}
+* Closing connection 0
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" --cookie "_my_session_id=bacadfad-3c3b-4830-b1b2-3d77dfb9ad13"
+{
+  "created_at": "2017-10-16 04:23:04", 
+  "email": "bobsession@hbtn.io", 
+  "first_name": null, 
+  "id": "cf3ddee1-ff24-49e4-a40b-2540333fe992", 
+  "last_name": null, 
+  "updated_at": "2017-10-16 04:23:04"
+}
+bob@dylan:~$
+bob@dylan:~$ sleep 10
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" --cookie "_my_session_id=bacadfad-3c3b-4830-b1b2-3d77dfb9ad13"
+{
+  "created_at": "2017-10-16 04:23:04", 
+  "email": "bobsession@hbtn.io", 
+  "first_name": null, 
+  "id": "cf3ddee1-ff24-49e4-a40b-2540333fe992", 
+  "last_name": null, 
+  "updated_at": "2017-10-16 04:23:04"
+}
+bob@dylan:~$
+bob@dylan:~$ sleep 60
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" --cookie "_my_session_id=bacadfad-3c3b-4830-b1b2-3d77dfb9ad13"
+{
+  "error": "Forbidden"
+}
+bob@dylan:~$
+```
 
 
 
