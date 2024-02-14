@@ -38,7 +38,7 @@ At the end of this project, you are expected to be able to [explain to anyone](h
 
 # Tasks 📃
 ## 0. Et moi et moi et moi!: [api/v1/app.py](./api/v1/app.py), [api/v1/views/users.py](./api/v1/views/users.py)
-Copy all your work of the **0x06. Basic authentication** project in this new folder.
+Copy all your work of the [**0x01-Basic_authentication**](https://github.com/elyse502/alx-backend-user-data/tree/main/0x01-Basic_authentication) project in this new folder.
 
 In this version, you implemented a **Basic authentication** for giving you access to all User endpoints:
 
@@ -50,7 +50,7 @@ In this version, you implemented a **Basic authentication** for giving you acces
 
 Now, you will add a new endpoint: `GET /users/me` to retrieve the authenticated `User` object.
 
-* Copy folders **`models`** and **`api`** from the previous project **`0x06. Basic authentication`**
+* Copy folders **`models`** and **`api`** from the previous project [**`0x01-Basic_authentication`**](https://github.com/elyse502/alx-backend-user-data/tree/main/0x01-Basic_authentication)
 * Please make sure all mandatory tasks of this previous project are done at 100% because this project (and the rest of this track) will be based on it.
 * Update `@app.before_request` in `api/v1/app.py`:
   * Assign the result of `auth.current_user(request)` to `request.current_user`
