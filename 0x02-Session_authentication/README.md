@@ -126,9 +126,104 @@ bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" -H "Authorization: Basic
 bob@dylan:~$
 ```
 
+## 1. Empty session: [api/v1/auth/session_auth.py](./api/v1/auth/session_auth.py), [api/v1/app.py](./api/v1/app.py)
+Create a class `SessionAuth` that inherits from `Auth`. For the moment this class will be empty. It’s the first step for creating a new authentication mechanism:
 
+* validate if everything inherits correctly without any overloading
+* validate the “switch” by using environment variables
 
+Update `api/v1/app.py` for using `SessionAuth` instance for the variable `auth` depending of the value of the environment variable `AUTH_TYPE`, If `AUTH_TYPE` is equal to `session_auth`:
 
+* import `SessionAuth` from `api.v1.auth.session_auth`
+* create an instance of `SessionAuth` and assign it to the variable `auth`
+
+Otherwise, keep the previous mechanism.
+
+**In the first terminal:**
+```groovy
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth python3 -m api.v1.app
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+....
+```
+**In a second terminal:**
+```groovy
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/status"
+{
+  "status": "OK"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/status/"
+{
+  "status": "OK"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users"
+{
+  "error": "Unauthorized"
+}
+bob@dylan:~$ 
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users" -H "Authorization: Test"
+{
+  "error": "Forbidden"
+}
+bob@dylan:~$
+```
+
+## 2. Create a session: [api/v1/auth/session_auth.py](./api/v1/auth/session_auth.py)
+Update `SessionAuth` class:
+
+* Create a class attribute `user_id_by_session_id` initialized by an empty dictionary
+* Create an instance method `def create_session(self, user_id: str = None) -> str:` that creates a Session ID for a `user_id`:
+  * Return `None` if `user_id` is `None`
+  * Return `None` if `user_id` is not a string
+  * Otherwise:
+    * Generate a Session ID using `uuid` module and `uuid4()` like `id` in `Base`
+    * Use this Session ID as key of the dictionary `user_id_by_session_id` - the value for this key must be `user_id`
+    * Return the Session ID
+  * The same `user_id` can have multiple Session ID - indeed, the `user_id` is the value in the dictionary `user_id_by_session_id`
+
+Now you an “in-memory” Session ID storing. You will be able to retrieve an `User` id based on a Session ID.
+```groovy
+bob@dylan:~$ cat  main_1.py 
+#!/usr/bin/env python3
+""" Main 1
+"""
+from api.v1.auth.session_auth import SessionAuth
+
+sa = SessionAuth()
+
+print("{}: {}".format(type(sa.user_id_by_session_id), sa.user_id_by_session_id))
+
+user_id = None
+session = sa.create_session(user_id)
+print("{} => {}: {}".format(user_id, session, sa.user_id_by_session_id))
+
+user_id = 89
+session = sa.create_session(user_id)
+print("{} => {}: {}".format(user_id, session, sa.user_id_by_session_id))
+
+user_id = "abcde"
+session = sa.create_session(user_id)
+print("{} => {}: {}".format(user_id, session, sa.user_id_by_session_id))
+
+user_id = "fghij"
+session = sa.create_session(user_id)
+print("{} => {}: {}".format(user_id, session, sa.user_id_by_session_id))
+
+user_id = "abcde"
+session = sa.create_session(user_id)
+print("{} => {}: {}".format(user_id, session, sa.user_id_by_session_id))
+
+bob@dylan:~$
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth ./main_1.py 
+<class 'dict'>: {}
+None => None: {}
+89 => None: {}
+abcde => 61997a1b-3f8a-4b0f-87f6-19d5cafee63f: {'61997a1b-3f8a-4b0f-87f6-19d5cafee63f': 'abcde'}
+fghij => 69e45c25-ec89-4563-86ab-bc192dcc3b4f: {'61997a1b-3f8a-4b0f-87f6-19d5cafee63f': 'abcde', '69e45c25-ec89-4563-86ab-bc192dcc3b4f': 'fghij'}
+abcde => 02079cb4-6847-48aa-924e-0514d82a43f4: {'61997a1b-3f8a-4b0f-87f6-19d5cafee63f': 'abcde', '02079cb4-6847-48aa-924e-0514d82a43f4': 'abcde', '69e45c25-ec89-4563-86ab-bc192dcc3b4f': 'fghij'}
+bob@dylan:~$
+```
 
 
 
