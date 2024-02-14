@@ -6,12 +6,12 @@ from uuid import uuid4
 
 
 class SessionAuth(Auth):
-    """_summary_
+    """ Implement Session Authorization protocol methods
     """
     user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
-        """_summary_
+        """ Creates a Session ID for a user with id user_id
 
         Args:
             user_id (str, optional): _description_. Defaults to None.
@@ -27,7 +27,7 @@ class SessionAuth(Auth):
         return str(id)
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
-        """_summary_
+        """ Returns a user ID based on a session ID
 
         Args:
             session_id (str, optional): _description_. Defaults to None.
@@ -40,7 +40,7 @@ class SessionAuth(Auth):
         return self.user_id_by_session_id.get(session_id)
 
     def current_user(self, request=None):
-        """_summary_
+        """ Return a user instance based on a cookie value
 
         Args:
             request (_type_, optional): _description_. Defaults to None.
@@ -51,7 +51,7 @@ class SessionAuth(Auth):
         return user
 
     def destroy_session(self, request=None):
-        """_summary_
+        """ Deletes a user session
 
         Args:
             request (_type_, optional): _description_. Defaults to None.
