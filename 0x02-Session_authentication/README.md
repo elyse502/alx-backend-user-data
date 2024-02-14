@@ -225,12 +225,176 @@ abcde => 02079cb4-6847-48aa-924e-0514d82a43f4: {'61997a1b-3f8a-4b0f-87f6-19d5caf
 bob@dylan:~$
 ```
 
+## 3. User ID for Session ID: [api/v1/auth/session_auth.py](./api/v1/auth/session_auth.py)
+Update `SessionAuth` class:
 
+Create an instance method `def user_id_for_session_id(self, session_id: str = None) -> str:` that returns a `User` ID based on a Session ID:
 
+* Return `None` if `session_id` is `None`
+* Return `None` if `session_id` is not a string
+* Return the value (the User ID) for the key `session_id` in the dictionary `user_id_by_session_id`.
+* You must use `.get()` built-in for accessing in a dictionary a value based on key
 
+Now you have 2 methods (`create_session` and `user_id_for_session_id`) for storing and retrieving a link between a `User` ID and a Session ID.
+```groovy
+bob@dylan:~$ cat main_2.py 
+#!/usr/bin/env python3
+""" Main 2
+"""
+from api.v1.auth.session_auth import SessionAuth
 
+sa = SessionAuth()
 
+user_id_1 = "abcde"
+session_1 = sa.create_session(user_id_1)
+print("{} => {}: {}".format(user_id_1, session_1, sa.user_id_by_session_id))
 
+user_id_2 = "fghij"
+session_2 = sa.create_session(user_id_2)
+print("{} => {}: {}".format(user_id_2, session_2, sa.user_id_by_session_id))
+
+print("---")
+
+tmp_session_id = None
+tmp_user_id = sa.user_id_for_session_id(tmp_session_id)
+print("{} => {}".format(tmp_session_id, tmp_user_id))
+
+tmp_session_id = 89
+tmp_user_id = sa.user_id_for_session_id(tmp_session_id)
+print("{} => {}".format(tmp_session_id, tmp_user_id))
+
+tmp_session_id = "doesntexist"
+tmp_user_id = sa.user_id_for_session_id(tmp_session_id)
+print("{} => {}".format(tmp_session_id, tmp_user_id))
+
+print("---")
+
+tmp_session_id = session_1
+tmp_user_id = sa.user_id_for_session_id(tmp_session_id)
+print("{} => {}".format(tmp_session_id, tmp_user_id))
+
+tmp_session_id = session_2
+tmp_user_id = sa.user_id_for_session_id(tmp_session_id)
+print("{} => {}".format(tmp_session_id, tmp_user_id))
+
+print("---")
+
+session_1_bis = sa.create_session(user_id_1)
+print("{} => {}: {}".format(user_id_1, session_1_bis, sa.user_id_by_session_id))
+
+tmp_user_id = sa.user_id_for_session_id(session_1_bis)
+print("{} => {}".format(session_1_bis, tmp_user_id))
+
+tmp_user_id = sa.user_id_for_session_id(session_1)
+print("{} => {}".format(session_1, tmp_user_id))
+
+bob@dylan:~$
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth ./main_2.py 
+abcde => 8647f981-f503-4638-af23-7bb4a9e4b53f: {'8647f981-f503-4638-af23-7bb4a9e4b53f': 'abcde'}
+fghij => a159ee3f-214e-4e91-9546-ca3ce873e975: {'a159ee3f-214e-4e91-9546-ca3ce873e975': 'fghij', '8647f981-f503-4638-af23-7bb4a9e4b53f': 'abcde'}
+---
+None => None
+89 => None
+doesntexist => None
+---
+8647f981-f503-4638-af23-7bb4a9e4b53f => abcde
+a159ee3f-214e-4e91-9546-ca3ce873e975 => fghij
+---
+abcde => 5d2930ba-f6d6-4a23-83d2-4f0abc8b8eee: {'a159ee3f-214e-4e91-9546-ca3ce873e975': 'fghij', '8647f981-f503-4638-af23-7bb4a9e4b53f': 'abcde', '5d2930ba-f6d6-4a23-83d2-4f0abc8b8eee': 'abcde'}
+5d2930ba-f6d6-4a23-83d2-4f0abc8b8eee => abcde
+8647f981-f503-4638-af23-7bb4a9e4b53f => abcde
+bob@dylan:~$
+```
+
+## 4. Session cookie: [api/v1/auth/auth.py](./api/v1/auth/auth.py)
+Update `api/v1/auth/auth.py` by adding the method `def session_cookie(self, request=None):` that returns a cookie value from a request:
+
+* Return `None` if `request` is `None`
+* Return the value of the cookie named `_my_session_id` from `request` - the name of the cookie must be defined by the environment variable **`SESSION_NAME`**
+* You must use `.get()` built-in for accessing the cookie in the request cookies dictionary
+* You must use the environment variable **`SESSION_NAME`** to define the name of the cookie used for the Session ID
+
+**In the first terminal:**
+```groovy
+bob@dylan:~$ cat main_3.py
+#!/usr/bin/env python3
+""" Cookie server
+"""
+from flask import Flask, request
+from api.v1.auth.auth import Auth
+
+auth = Auth()
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET'], strict_slashes=False)
+def root_path():
+    """ Root path
+    """
+    return "Cookie value: {}\n".format(auth.session_cookie(request))
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port="5000")
+
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth SESSION_NAME=_my_session_id ./main_3.py 
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+....
+```
+**In a second terminal:**
+```groovy
+bob@dylan:~$ curl "http://0.0.0.0:5000"
+Cookie value: None
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000" --cookie "_my_session_id=Hello"
+Cookie value: Hello
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000" --cookie "_my_session_id=C is fun"
+Cookie value: C is fun
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000" --cookie "_my_session_id_fake"
+Cookie value: None
+bob@dylan:~$
+```
+
+## 5. Before request: [5. Before request](./5. Before request)
+Update the `@app.before_request` method in `api/v1/app.py`:
+
+* Add the URL path `/api/v1/auth_session/login/` in the list of excluded paths of the method `require_auth` - this route doesn’t exist yet but it should be accessible outside authentication
+* If `auth.authorization_header(request)` and `auth.session_cookie(request)` return `None`, `abort(401)`
+
+**In the first terminal:**
+```groovy
+bob@dylan:~$ API_HOST=0.0.0.0 API_PORT=5000 AUTH_TYPE=session_auth SESSION_NAME=_my_session_id python3 -m api.v1.app
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+....
+```
+**In a second terminal:**
+```groovy
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/status"
+{
+  "status": "OK"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/auth_session/login" # not found but not "blocked" by an authentication system
+{
+  "error": "Not found"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me"
+{
+  "error": "Unauthorized"
+}
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" -H "Authorization: Basic Ym9iQGhidG4uaW86SDBsYmVydG9uU2Nob29sOTgh" # Won't work because the environment variable AUTH_TYPE is equal to "session_auth"
+{
+  "error": "Forbidden"
+}
+bob@dylan:~$
+bob@dylan:~$ curl "http://0.0.0.0:5000/api/v1/users/me" --cookie "_my_session_id=5535d4d7-3d77-4d06-8281-495dc3acfe76" # Won't work because no user is linked to this Session ID
+{
+  "error": "Forbidden"
+}
+bob@dylan:~$
+```
 
 
 
