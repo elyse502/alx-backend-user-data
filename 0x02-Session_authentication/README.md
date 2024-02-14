@@ -49,7 +49,7 @@ In this version, you implemented a **Basic authentication** for giving you acces
 
 Now, you will add a new endpoint: `GET /users/me` to retrieve the authenticated `User` object.
 
-* Copy folders models and api from the previous project **`0x06. Basic authentication`**
+* Copy folders `models` and `api` from the previous project **`0x06. Basic authentication`**
 * Please make sure all mandatory tasks of this previous project are done at 100% because this project (and the rest of this track) will be based on it.
 * Update `@app.before_request` in `api/v1/app.py`:
   * Assign the result of `auth.current_user(request)` to `request.current_user`
