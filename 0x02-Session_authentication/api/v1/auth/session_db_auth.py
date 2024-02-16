@@ -23,12 +23,16 @@ class SessionDBAuth(SessionExpAuth):
         if user_id is None or not isinstance(user_id, str):
             return None
 
-        session_id = super().create_session(user_id)
-        new_user_session = UserSession()
-        new_user_session.user_id = user_id
-        new_user_session.session_id = session_id
-        new_user_session.save()
-        return session_id
+        try:
+            session_id = super().create_session(user_id)
+            new_user_session = UserSession()
+            new_user_session.user_id = user_id
+            new_user_session.session_id = session_id
+            new_user_session.save()
+            return session_id
+        except Exception as e:
+            print("Error creating session:", e)
+            return None
 
     def user_id_for_session_id(self, session_id=None):
         """ Returns a user ID based on a session ID
@@ -45,16 +49,18 @@ class SessionDBAuth(SessionExpAuth):
             if not user_session:
                 return None
             user_json = user_session[0].to_json()
-        except AttributeError:
-            return None
 
-        if self.session_duration <= 0:
+            if self.session_duration <= 0:
+                return user_json.get('user_id')
+            created_at = datetime.fromisoformat(user_json.get('created_at'))
+            expiration_time = created_at + timedelta(
+                seconds=self.session_duration)
+            if expiration_time < datetime.now():
+                return None
             return user_json.get('user_id')
-        created_at = datetime.fromisoformat(user_json.get('created_at'))
-        expiration_time = created_at + timedelta(seconds=self.session_duration)
-        if expiration_time < datetime.now():
+        except Exception as e:
+            print("Error retrieving user ID:", e)
             return None
-        return user_json.get('user_id')
 
     def destroy_session(self, request=None):
         """ Destroy a UserSession instance based on a
@@ -63,12 +69,15 @@ class SessionDBAuth(SessionExpAuth):
         if request is None:
             return False
         session_id = self.session_cookie(request)
-        # Check if request doesn’t contain the Session ID cookie
         if not session_id:
             return False
-        user_session = UserSession.search({'session_id': session_id})
-        # If the Session ID of the request is not linked to any User ID
-        if not user_session:
+
+        try:
+            user_session = UserSession.search({'session_id': session_id})
+            if not user_session:
+                return False
+            user_session[0].remove()
+            return True
+        except Exception as e:
+            print("Error destroying session:", e)
             return False
-        user_session[0].remove()
-        return True
