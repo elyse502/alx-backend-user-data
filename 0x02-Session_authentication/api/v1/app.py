@@ -25,8 +25,10 @@ else:
     auth = Auth()
 
 
-# check the AUTH_TYPE
+""" Check the AUTH_TYPE """
+# Determine the authentication type based on the environment variable
 AUTH_TYPE = os.getenv("AUTH_TYPE")
+# Instantiate the appropriate authentication class
 if AUTH_TYPE == "auth":
     from api.v1.auth.auth import Auth
     auth = Auth()
@@ -42,6 +44,8 @@ elif AUTH_TYPE == "session_exp_auth":
 elif AUTH_TYPE == "session_db_auth":
     from api.v1.auth.session_db_auth import SessionDBAuth
     auth = SessionDBAuth()
+else:
+    auth = SessionExpAuth()
 
 
 @app.before_request
@@ -83,7 +87,7 @@ def unauthorized(error) -> str:
 
 @app.errorhandler(403)
 def forbidden(error) -> str:
-    """fobidden handler
+    """Forbidden handler
     """
     return jsonify({"error": "Forbidden"}), 403
 
