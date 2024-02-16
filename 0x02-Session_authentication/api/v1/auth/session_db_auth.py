@@ -40,12 +40,13 @@ class SessionDBAuth(SessionExpAuth):
         if session_id is None or not isinstance(session_id, str):
             return None
 
-        user_session = UserSession.search({'session_id': session_id})
-        # If the Session ID of the request is not linked to any User ID
-        if not user_session:
+        try:
+            user_session = UserSession.search({'session_id': session_id})
+            if not user_session:
+                return None
+            user_json = user_session[0].to_json()
+        except AttributeError:
             return None
-
-        user_json = user_session[0].to_json()
 
         if self.session_duration <= 0:
             return user_json.get('user_id')
