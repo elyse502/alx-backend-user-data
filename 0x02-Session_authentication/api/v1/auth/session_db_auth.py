@@ -70,11 +70,13 @@ class SessionDBAuth(SessionExpAuth):
         if request is None:
             return False
         session_id = self.session_cookie(request)
+        # Check if request doesn’t contain the Session ID cookie
         if not session_id:
             return False
 
         try:
             user_session = UserSession.search({'session_id': session_id})
+            # If the Session ID of the request is not linked to any User ID
             if not user_session:
                 return False
             user_session[0].remove()
