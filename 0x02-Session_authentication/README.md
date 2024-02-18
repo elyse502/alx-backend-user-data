@@ -1,4 +1,4 @@
-# 0x02. Session authentication
+# 0x02. Session authentication 
 
 # Background Context 🗞️
 In this project, you will implement a **Session Authentication**. You are not allowed to install any other module.
