@@ -190,7 +190,7 @@ bob@dylan:~$
 ```
 
 ## 3. update user: [db.py](db.py)
-In this task, you will implement the `DB.update_user` method that takes as argument a required `user_id` integer and arbitrary keyword arguments, and returns None.
+In this task, you will implement the `DB.update_user` method that takes as argument a required `user_id` integer and arbitrary keyword arguments, and returns `None`.
 
 The method will use `find_user_by` to locate the user to update, then will update the user’s attributes as passed in the method’s arguments then commit changes to the database.
 
@@ -299,14 +299,130 @@ could not create a new user: User me@me.com already exists
 bob@dylan:~$
 ```
 
+## 6. Basic Flask app: [app.py](app.py)
+In this task, you will set up a basic Flask app.
+
+Create a Flask app that has a single **`GET`** route (`"/"`) and use `flask.jsonify` to return a JSON payload of the form:
+```groovy
+{"message": "Bienvenue"}
+```
+Add the following code at the end of the module:
+```groovy
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port="5000")
+```
+
+## 7. Register user: [app.py](app.py)
+In this task, you will implement the end-point to register a user. Define a `users` function that implements the **`POST /users`** route.
+
+Import the `Auth` object and instantiate it at the root of the module as such:
+```groovy
+from auth import Auth
 
 
+AUTH = Auth()
+```
+The end-point should expect two form data fields: **`"email"`** and **`"password"`**. If the user does not exist, the end-point should register it and respond with the following JSON payload:
+```groovy
+{"email": "<registered email>", "message": "user created"}
+```
+If the user is already registered, catch the exception and return a JSON payload of the form
+```groovy
+{"message": "email already registered"}
+```
+and return a 400 status code
 
+Remember that you should only use `AUTH` in this app. `DB` is a lower abstraction that is proxied by `Auth`.
 
+**Terminal 1:**
+```groovy
+bob@dylan:~$ python3 app.py 
+* Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+```
+**Terminal 2:**
+```groovy
+bob@dylan:~$ curl -XPOST localhost:5000/users -d 'email=bob@me.com' -d 'password=mySuperPwd' -v
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 5000 (#0)
+> POST /users HTTP/1.1
+> Host: localhost:5000
+> User-Agent: curl/7.58.0
+> Accept: */*
+> Content-Length: 40
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 40 out of 40 bytes
+* HTTP 1.0, assume close after body
+< HTTP/1.0 200 OK
+< Content-Type: application/json
+< Content-Length: 52
+< Server: Werkzeug/1.0.1 Python/3.7.3
+< Date: Wed, 19 Aug 2020 00:03:18 GMT
+< 
+{"email":"bob@me.com","message":"user created"}
 
+bob@dylan:~$
+bob@dylan:~$ curl -XPOST localhost:5000/users -d 'email=bob@me.com' -d 'password=mySuperPwd' -v
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 5000 (#0)
+> POST /users HTTP/1.1
+> Host: localhost:5000
+> User-Agent: curl/7.58.0
+> Accept: */*
+> Content-Length: 40
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 40 out of 40 bytes
+* HTTP 1.0, assume close after body
+< HTTP/1.0 400 BAD REQUEST
+< Content-Type: application/json
+< Content-Length: 39
+< Server: Werkzeug/1.0.1 Python/3.7.3
+< Date: Wed, 19 Aug 2020 00:03:33 GMT
+< 
+{"message":"email already registered"}
+bob@dylan:~$
+```
 
+## 8. Credentials validation: [auth.py](auth.py)
+In this task, you will implement the `Auth.valid_login` method. It should expect **`email`** and **`password`** required arguments and return a boolean.
 
+Try locating the user by email. If it exists, check the password with `bcrypt.checkpw`. If it matches return `True`. In any other case, return `False`.
+```groovy
+bob@dylan:~$ cat main.py
+#!/usr/bin/env python3
+"""
+Main file
+"""
+from auth import Auth
 
+email = 'bob@bob.com'
+password = 'MyPwdOfBob'
+auth = Auth()
+
+auth.register_user(email, password)
+
+print(auth.valid_login(email, password))
+
+print(auth.valid_login(email, "WrongPwd"))
+
+print(auth.valid_login("unknown@email", password))
+
+bob@dylan:~$ python3 main.py
+True
+False
+False
+bob@dylan:~$
+```
 
 
 
