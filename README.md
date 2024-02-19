@@ -20,9 +20,7 @@ This repository consists of Backend User Data done with [ALX Africa](https://www
 - [0x00](./0x00-personal_data) : Examples of Personally Identifiable Information (PII); How to: implement a log filter that will obfuscate PII fields, encrypt a password and check the validity of an input password, authenticate to a database using environment variables
 - [0x01](./0x01-Basic_authentication) : What authentication means; What Base64 is; How to encode a string in Base64; What Basic authentication means; How to send the Authorization header.
 - [0x02](./0x02-Session_authentication) : What: authentication means, session authentication means, Cookies are; How to: send Cookies, parse Cookies.
-<!--
-- [0x03](./0x03-ES6_data_manipulation) : Map, filter and reduce.
-- [0x04](./0x04-TypeScript) : Types, Interfaces, Classes, Functions. -->
+- [0x03](./0x03-user_authentication_service) : How to: declare API routes in a Flask app, get and set cookies, retrieve request form data `AND` return various HTTP status codes.
 
 ## Access ℹ️
 You can access everything in here by [forking](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and then [cloning](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) this repository.
