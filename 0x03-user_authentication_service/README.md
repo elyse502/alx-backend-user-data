@@ -345,7 +345,7 @@ bob@dylan:~$ python3 app.py
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ```
 **Terminal 2:**
-```groovy
+```bash
 bob@dylan:~$ curl -XPOST localhost:5000/users -d 'email=bob@me.com' -d 'password=mySuperPwd' -v
 Note: Unnecessary use of -X or --request, POST is already inferred.
 *   Trying 127.0.0.1...
