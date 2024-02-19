@@ -657,7 +657,7 @@ Create a new module called main.py. Create one function for each of the followin
 * `reset_password_token(email: str) -> str`
 * `update_password(email: str, reset_token: str, new_password: str) -> None`
 
-Then copy the following code at the end of the `main` module:
+Then copy the following code at the end of the **`main`** module:
 ```groovy
 EMAIL = "guillaume@holberton.io"
 PASSWD = "b4l0u"
