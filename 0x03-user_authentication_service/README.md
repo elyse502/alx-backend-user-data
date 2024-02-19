@@ -2,7 +2,7 @@
 
 ![4cb3c8c607afc1d1582d](https://github.com/elyse502/alx-backend-user-data/assets/125453474/fc7f0d9b-deab-423e-97ec-75f38b0690b2)
 
-In the industry, you should not implement your own authentication system and use a module or framework that doing it for you (like in Python-Flask: [Flask-User](https://flask-user.readthedocs.io/en/latest/)). Here, for the learning purpose, we will walk through each step of this mechanism to understand it by doing.
+In the industry, you should **not** implement your own authentication system and use a module or framework that doing it for you (like in Python-Flask: [Flask-User](https://flask-user.readthedocs.io/en/latest/)). Here, for the learning purpose, we will walk through each step of this mechanism to understand it by doing.
 
 # Resources🏗️
 <b>Read or watch:</b>
@@ -45,8 +45,39 @@ pip3 install bcrypt
 pip3 install -r requirements.txt
 ```
 
+# Tasks 📃
+## 0. User model: [user.py](user.py)
+In this task you will create a SQLAlchemy model named `User` for a database table named `users` (by using the [mapping declaration](https://docs.sqlalchemy.org/en/13/orm/tutorial.html#declare-a-mapping) of SQLAlchemy).
 
+The model will have the following attributes:
 
+* `id`, the integer primary key
+* `email`, a non-nullable string
+* `hashed_password`, a non-nullable string
+* `session_id`, a nullable string
+* `reset_token`, a nullable string
+```groovy
+bob@dylan:~$ cat main.py
+#!/usr/bin/env python3
+"""
+Main file
+"""
+from user import User
+
+print(User.__tablename__)
+
+for column in User.__table__.columns:
+    print("{}: {}".format(column, column.type))
+
+bob@dylan:~$ python3 main.py
+users
+users.id: INTEGER
+users.email: VARCHAR(250)
+users.hashed_password: VARCHAR(250)
+users.session_id: VARCHAR(250)
+users.reset_token: VARCHAR(250)
+bob@dylan:~$
+```
 
 
 
