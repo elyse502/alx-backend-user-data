@@ -40,7 +40,7 @@ You will need to install `bcrypt`
 ```groovy
 pip3 install bcrypt
 ```
-* To Install Dependencies used:
+* To Install **Dependencies** used:
 ```groovy
 pip3 install -r requirements.txt
 ```
