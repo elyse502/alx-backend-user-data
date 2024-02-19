@@ -646,7 +646,7 @@ If the token is valid, respond with a 200 HTTP code and the following JSON paylo
 ## 20. End-to-end integration test: [main.py](main.py)
 Start your app. Open a new terminal window.
 
-Create a new module called main.py. Create one function for each of the following tasks. Use the requests module to query your web server for the corresponding end-point. Use assert to validate the response’s expected status code and payload (if any) for each task.
+Create a new module called `main.py`. Create one function for each of the following tasks. Use the `requests` module to query your web server for the corresponding end-point. Use `assert` to validate the response’s expected status code and payload (if any) for each task.
 
 * `register_user(email: str, password: str) -> None`
 * `log_in_wrong_password(email: str, password: str) -> None`
