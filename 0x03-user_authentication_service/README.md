@@ -1,4 +1,4 @@
-# 0x03. User authentication service 
+# 0x03. User authentication service
 
 ![4cb3c8c607afc1d1582d](https://github.com/elyse502/alx-backend-user-data/assets/125453474/fc7f0d9b-deab-423e-97ec-75f38b0690b2)
 
