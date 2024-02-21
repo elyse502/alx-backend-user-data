@@ -678,12 +678,22 @@ if __name__ == "__main__":
 ```
 Run `python main.py`. If everything is correct, you should see no output.
 
+---
 
+<div align="center">
 
+# Reference 📚
+# 🔐 Stepping into the World of Secure Logins: A User's Perspective! 🔐
+</div>
 
+Hey `@Cohort 13` ! 👋 Ever wondered what happens behind the scenes to keep your online accounts Fort Knox-level secure? Let's dive into a couple of real-world examples from a user's point of view 👇🏽 - can you think of other examples where **User Authentication Service** is used?
 
+## 🏦 Banking Marvel: Multi-Factor Authentication (MFA) Magic!
+Imagine logging into your bank account, and it's not just about the usual password anymore. With MFA, it's a triple-layered security dance! You punch in your password, receive a one-time passcode (OTP), and seal the deal with a fingerprint scan. It's like having a high-tech guardian for your financial fortress! 🚀💳
 
+## 💻 E-Commerce Elegance: OAuth to the Rescue!
+Now, let's talk online shopping. Logging into that favorite e-commerce site used to be a password maze, right? Enter OAuth, the hero of seamless logins. Picture this: sign in using your Google or Facebook credentials, eliminating the password overload. It's a win-win – convenience meets enhanced security! 🌐🔒
 
-
+In these examples, security isn't just a buzzword; it's a tangible, user-friendly experience. Here's to a safer and more accessible online world! 🌟💻
 
 
